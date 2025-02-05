@@ -12,7 +12,7 @@ builder.Services.AddDbContext<DevSteamAPIContext>(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
-    { builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader() });
+    { builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
 });
 
 // Add services to the container.
@@ -59,6 +59,8 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireDigit = false;
     options.Password.RequiredLength = 4;
 })
     .AddEntityFrameworkStores<DevSteamAPIContext>()
@@ -78,7 +80,7 @@ app.UseSwaggerUI();
 
 //Mapear os EndPoints padrão do Identity Framework
 app.MapGroup("/Users").MapIdentityApi<IdentityUser>();
-app.MapGroup("/Roles").MapIdentityApi<IdentityRole>();
+//app.MapGroup("/Roles").MapIdentityApi<IdentityRole>();
 
 
 app.UseHttpsRedirection();
