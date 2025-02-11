@@ -45,6 +45,27 @@ namespace DevSteamAPI.Controllers
             return jogo;
         }
 
+        // GET: api/Jogos/ByNome
+        [HttpGet("ByNome")]
+        public async Task<ActionResult<IEnumerable<Jogo>>> GetJogosByNome(string nome)
+        {
+            if (string.IsNullOrEmpty(nome))
+            {
+                return BadRequest("O nome do jogo é obrigatório.");
+            }
+
+            var jogos = await _context.Jogos
+                .Where(j => j.JogoNome.Contains(nome, StringComparison.OrdinalIgnoreCase))
+                .ToListAsync();
+
+            if (jogos == null || !jogos.Any())
+            {
+                return NotFound("Nenhum jogo encontrado com o nome fornecido.");
+            }
+
+            return jogos;
+        }
+
         // PUT: api/Jogos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
